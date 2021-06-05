@@ -1,0 +1,11 @@
+accessWidener   v1  named
+
+accessible  class   net/minecraft/entity/passive/BeeEntity$PollinateGoal
+accessible  class   net/minecraft/entity/passive/BeeEntity$GrowCropsGoal
+
+accessible  method  net/minecraft/block/SaplingBlock    <init>  (Lnet/minecraft/block/sapling/SaplingGenerator;Lnet/minecraft/block/AbstractBlock$Settings;)V
+accessible  method  net/minecraft/entity/passive/BeeEntity  addCropCounter  ()V
+accessible  method  net/minecraft/block/FireBlock   registerFlammableBlock  (Lnet/minecraft/block/Block;II)V
+accessible  method  net/minecraft/block/ComposterBlock  registerCompostableItem (FLnet/minecraft/item/ItemConvertible;)V
+
+accessible  field   net/minecraft/client/MinecraftClient    itemColors  Lnet/minecraft/client/color/item/ItemColors;

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "fruitful",
+  "version": "${version}",
+  "name": "Fruitful",
+  "description": "A Fabric port of an overhaul to apple farming and eating!",
+  "authors": [
+    "Team Aurora"
+  ],
+  "contributors": [],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/fruitful-fabric",
+    "sources": "https://github.com/teamauroramods/Fruitful-Fabric/",
+    "issues": "https://github.com/teamauroramods/Fruitful-Fabric/issues/"
+  },
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.teamaurora.fruitful.core.Fruitful"
+    ],
+    "client": [
+      "com.teamaurora.fruitful.client.FruitfulClient"
+    ],
+    "server": [],
+    "modmenu": [
+      "com.teamaurora.fruitful.core.config.FruitfulModMenuCompat"
+    ]
+  },
+  "accessWidener" : "fruitful.accesswidener",
+  "mixins": [
+    "fruitful.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*"
+  }
+}
