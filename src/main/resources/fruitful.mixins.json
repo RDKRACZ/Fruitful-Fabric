@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BeeEntityFindPollinationTargetGoalMixin",
-    "BeeEntityPollinateGoal"
+    "BeeEntityPollinateGoalMixin",
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

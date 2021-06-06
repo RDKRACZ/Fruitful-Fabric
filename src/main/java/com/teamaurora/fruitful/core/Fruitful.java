@@ -11,12 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Fruitful implements ModInitializer {
-    /*
-    TODO:
-      Check if apple leaves is made with the process,
-      Check if sustaining works and on the items,
-     */
-
     public static final String MODID = "fruitful";
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);

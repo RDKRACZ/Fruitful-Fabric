@@ -9,7 +9,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.registry.Registry;
 
 public class FruitfulItems {
-    public static Item BAKED_APPLE = register("baked_apple", new Item(new FabricItemSettings().food(Foods.BAKED_APPLE).group(ItemGroup.FOOD)));
+    public static Item BAKED_APPLE = register("baked_apple", new Item(new FabricItemSettings().food(Foods.BAKED_APPLE).food(Foods.BAKED_APPLE).group(ItemGroup.FOOD)));
 
     private static <I extends Item> I register(String id, I item) {
         Registry.register(Registry.ITEM, Fruitful.id(id), item);

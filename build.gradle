@@ -19,6 +19,10 @@ repositories {
         name = 'Shedaniel Maven'
         url "https://maven.shedaniel.me/"
     }
+    maven {
+        name = 'Florens Maven'
+        url = "https://maven.florens.be"
+    }
 }
 
 dependencies {
@@ -39,6 +43,9 @@ dependencies {
         transitive(false)
     }
     modRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+    // Autoload
+    modRuntime "be.florens:autoload-fabric:1.1.3"
 }
 
 minecraft.accessWidener "src/main/resources/fruitful.accesswidener"

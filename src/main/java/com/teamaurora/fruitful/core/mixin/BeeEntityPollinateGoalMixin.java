@@ -14,11 +14,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(BeeEntity.PollinateGoal.class)
-public abstract class BeeEntityPollinateGoal {
+public abstract class BeeEntityPollinateGoalMixin {
     @Shadow
     protected abstract Optional<BlockPos> findFlower(Predicate<BlockState> p_226500_1_, double distance);
 
-    public BeeEntityPollinateGoal() {
+    public BeeEntityPollinateGoalMixin() {
     }
 
     @Inject(method = "getFlower", at = @At("HEAD"), cancellable = true)
