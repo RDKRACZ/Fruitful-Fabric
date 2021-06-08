@@ -28,7 +28,15 @@ public class OakFlowerLeavesBlock extends LeavesBlock {
     @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
         if (worldIn.getMoonSize() == 1.0 && !state.get(LeavesBlock.PERSISTENT)) {
-            worldIn.setBlockState(pos, FruitfulBlocks.BLOSSOMING_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
+            boolean canBlossom = true;
+            for (Direction dir : Direction.values()) {
+                if (worldIn.getBlockState(pos.offset(dir)).getBlock() instanceof OakBlossomBlock) canBlossom = false;
+            }
+            if (canBlossom) {
+                worldIn.setBlockState(pos, FruitfulBlocks.BLOSSOMING_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)).with(OakBlossomBlock.POLLINATED, worldIn.getRandom().nextInt(250) == 0));
+            } else if (state.getBlock() != FruitfulBlocks.FLOWERING_OAK_LEAVES) {
+                worldIn.setBlockState(pos, FruitfulBlocks.FLOWERING_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
+            }
         }
 
         super.randomTick(state, worldIn, pos, random);

@@ -48,7 +48,7 @@ public class FruitLeavesBlock extends LeavesBlock {
      */
     @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (worldIn.getMoonSize() <= 0.5 && !state.get(LeavesBlock.PERSISTENT)) {
+        if (worldIn.getMoonSize() <= 0.25 && !state.get(LeavesBlock.PERSISTENT)) {
             dropStack(worldIn, pos, new ItemStack(fruitItem, 1));
             worldIn.setBlockState(pos, FruitfulBlocks.BUDDING_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
         }
