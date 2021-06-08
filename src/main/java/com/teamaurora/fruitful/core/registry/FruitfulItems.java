@@ -2,7 +2,6 @@ package com.teamaurora.fruitful.core.registry;
 
 import com.teamaurora.fruitful.core.Fruitful;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -17,6 +16,6 @@ public class FruitfulItems {
     }
 
     public static class Foods {
-        public static final FoodComponent BAKED_APPLE = new FoodComponent.Builder().hunger(6).saturationModifier(0.4F).statusEffect(new StatusEffectInstance(FruitfulEffects.SUSTAINING, 200, 1, false, false, true), 1.0F).build();
+        public static final FoodComponent BAKED_APPLE = new FoodComponent.Builder().hunger(6).saturationModifier(0.4F).build();
     }
 }
