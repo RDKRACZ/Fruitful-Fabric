@@ -7,5 +7,6 @@ accessible  method  net/minecraft/block/SaplingBlock    <init>  (Lnet/minecraft/
 accessible  method  net/minecraft/entity/passive/BeeEntity  addCropCounter  ()V
 accessible  method  net/minecraft/block/FireBlock   registerFlammableBlock  (Lnet/minecraft/block/Block;II)V
 accessible  method  net/minecraft/block/ComposterBlock  registerCompostableItem (FLnet/minecraft/item/ItemConvertible;)V
+accessible  method  net/minecraft/entity/effect/StatusEffect    <init>  (Lnet/minecraft/entity/effect/StatusEffectType;I)V
 
 accessible  field   net/minecraft/client/MinecraftClient    itemColors  Lnet/minecraft/client/color/item/ItemColors;

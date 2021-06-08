@@ -3,6 +3,7 @@ package com.teamaurora.fruitful.core;
 import com.teamaurora.fruitful.core.config.FruitfulConfig;
 import com.teamaurora.fruitful.core.other.FruitfulCompat;
 import com.teamaurora.fruitful.core.other.FruitfulEvents;
+import com.teamaurora.fruitful.core.registry.FruitfulEffects;
 import com.teamaurora.fruitful.core.registry.FruitfulFeatures;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
@@ -22,6 +23,7 @@ public class Fruitful implements ModInitializer {
         FruitfulFeatures.registerFeatures();
         FruitfulEvents.registerEvents();
         FruitfulCompat.registerCompact();
+        FruitfulEffects.init();
 
         LOGGER.log(Level.INFO, "Fruity!");
     }
