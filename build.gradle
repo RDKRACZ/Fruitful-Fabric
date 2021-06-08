@@ -1,10 +1,10 @@
 plugins {
-    id 'fabric-loom' version '0.6-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -33,8 +33,6 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
     // Cloth
-    modApi "me.shedaniel.cloth.api:cloth-api:${project.cloth_api_version}"
-    include "me.shedaniel.cloth.api:cloth-api:${project.cloth_api_version}"
     modApi "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
     include "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 
@@ -49,7 +47,6 @@ dependencies {
 }
 
 minecraft.accessWidener "src/main/resources/fruitful.accesswidener"
-sourceSets.main.resources.srcDirs += file "src/generated/resources"
 
 processResources {
     inputs.property "version", project.version
@@ -64,8 +61,9 @@ processResources {
     }
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release = 16
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
