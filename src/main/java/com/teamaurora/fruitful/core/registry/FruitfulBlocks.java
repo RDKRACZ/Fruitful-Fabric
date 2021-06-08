@@ -19,10 +19,10 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 
 public class FruitfulBlocks {
-    public static OakFlowerLeavesBlock FLOWERING_OAK_LEAVES = register("flowering_oak_leaves", new OakFlowerLeavesBlock(FruitfulBlocks.Settings.FLOWERING_OAK_LEAVES), ItemGroup.DECORATIONS);
-    public static OakFlowerLeavesBlock BUDDING_OAK_LEAVES = register("budding_oak_leaves", new OakFlowerLeavesBlock(FruitfulBlocks.Settings.FLOWERING_OAK_LEAVES), ItemGroup.DECORATIONS);
-    public static OakBlossomBlock BLOSSOMING_OAK_LEAVES = register("blossoming_oak_leaves", new OakBlossomBlock(FruitfulBlocks.Settings.FLOWERING_OAK_LEAVES), ItemGroup.DECORATIONS);
-    public static FruitLeavesBlock APPLE_OAK_LEAVES = register("apple_oak_leaves", new FruitLeavesBlock(FruitfulBlocks.Settings.FLOWERING_OAK_LEAVES, FruitfulBlocks.BUDDING_OAK_LEAVES, Items.APPLE), ItemGroup.DECORATIONS);
+    public static OakFlowerLeavesBlock FLOWERING_OAK_LEAVES = register("flowering_oak_leaves", new OakFlowerLeavesBlock(Settings.FLOWERING_OAK_LEAVES), ItemGroup.DECORATIONS);
+    public static OakFlowerLeavesBlock BUDDING_OAK_LEAVES = register("budding_oak_leaves", new OakFlowerLeavesBlock(Settings.FLOWERING_OAK_LEAVES), ItemGroup.DECORATIONS);
+    public static OakBlossomBlock BLOSSOMING_OAK_LEAVES = register("blossoming_oak_leaves", new OakBlossomBlock(Settings.FLOWERING_OAK_LEAVES), ItemGroup.DECORATIONS);
+    public static FruitLeavesBlock APPLE_OAK_LEAVES = register("apple_oak_leaves", new FruitLeavesBlock(Settings.FLOWERING_OAK_LEAVES, FruitfulBlocks.BUDDING_OAK_LEAVES, Items.APPLE), ItemGroup.DECORATIONS);
 
     public static SaplingBlock FLOWERING_OAK_SAPLING = register("flowering_oak_sapling", new SaplingBlock(new FloweringOakTree(), Settings.FLOWERING_OAK_SAPLING), ItemGroup.DECORATIONS);
     public static FlowerPotBlock POTTED_FLOWERING_OAK_SAPLING = register("potted_flowering_oak_sapling", new FlowerPotBlock(FLOWERING_OAK_SAPLING, FabricBlockSettings.copy(Blocks.POTTED_ALLIUM)));
@@ -39,8 +39,8 @@ public class FruitfulBlocks {
     }
 
     public static final class Settings {
-        public static final FabricBlockSettings FLOWERING_OAK_LEAVES = FabricBlockSettings.of(Material.LEAVES, MaterialColor.GREEN).breakByTool(FabricToolTags.HOES).nonOpaque().strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).allowsSpawning(FruitfulBlocks.Settings::allowsSpawnOnLeaves).suffocates(FruitfulBlocks.Settings::isntSolid).blockVision(FruitfulBlocks.Settings::isntSolid);
-        public static final FabricBlockSettings FLOWERING_OAK_SAPLING = FabricBlockSettings.of(Material.PLANT, MaterialColor.GREEN).noCollision().ticksRandomly().strength(0.0F).sounds(BlockSoundGroup.GRASS);
+        public static final FabricBlockSettings FLOWERING_OAK_LEAVES = FabricBlockSettings.of(Material.LEAVES, MapColor.GREEN).breakByTool(FabricToolTags.HOES).nonOpaque().strength(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).allowsSpawning(Settings::allowsSpawnOnLeaves).suffocates(Settings::isntSolid).blockVision(Settings::isntSolid);
+        public static final FabricBlockSettings FLOWERING_OAK_SAPLING = FabricBlockSettings.of(Material.PLANT, MapColor.GREEN).noCollision().ticksRandomly().strength(0.0F).sounds(BlockSoundGroup.GRASS);
 
         public static boolean allowsSpawnOnLeaves(BlockState state, BlockView access, BlockPos pos, EntityType<?> entity) {
             return entity == EntityType.OCELOT || entity == EntityType.PARROT;

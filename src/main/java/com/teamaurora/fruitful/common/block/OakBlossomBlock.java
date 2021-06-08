@@ -43,7 +43,7 @@ public class OakBlossomBlock extends Block implements Shearable {
     );
     */
 
-    public OakBlossomBlock(AbstractBlock.Settings properties) {
+    public OakBlossomBlock(Settings properties) {
         super(properties);
         this.setDefaultState(this.stateManager.getDefaultState().with(DISTANCE, 7).with(PERSISTENT, false).with(POLLINATED, false));
     }

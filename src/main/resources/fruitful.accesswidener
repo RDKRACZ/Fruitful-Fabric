@@ -2,6 +2,7 @@ accessWidener   v1  named
 
 accessible  class   net/minecraft/entity/passive/BeeEntity$PollinateGoal
 accessible  class   net/minecraft/entity/passive/BeeEntity$GrowCropsGoal
+accessible  class   net/minecraft/world/gen/feature/ConfiguredFeatures$Decorators
 
 accessible  method  net/minecraft/block/SaplingBlock    <init>  (Lnet/minecraft/block/sapling/SaplingGenerator;Lnet/minecraft/block/AbstractBlock$Settings;)V
 accessible  method  net/minecraft/entity/passive/BeeEntity  addCropCounter  ()V

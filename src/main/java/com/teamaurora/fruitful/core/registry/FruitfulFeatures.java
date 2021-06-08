@@ -10,13 +10,14 @@ import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DataPool;
+import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.UniformIntDistribution;
 import net.minecraft.world.gen.decorator.CountExtraDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.feature.*;
@@ -35,7 +36,7 @@ import java.util.function.Predicate;
 
 public class FruitfulFeatures {
     public static void registerFeatures(){
-        FruitfulFeatures.Configured.registerConfiguredFeatures();
+        Configured.registerConfiguredFeatures();
         FruitfulFeatures.registerModifications();
     }
 
@@ -73,21 +74,28 @@ public class FruitfulFeatures {
         public static final BlockState BUDDING_OAK_LEAVES = FruitfulBlocks.BUDDING_OAK_LEAVES.getDefaultState();
     }
 
+    static DataPool.Builder<BlockState> method_35926() {
+        return DataPool.builder();
+    }
+
     public static final class Configs {
         public static final TreeFeatureConfig FLOWERING_OAK = (new TreeFeatureConfig.Builder(
                 new SimpleBlockStateProvider(BlockStates.OAK_LOG),
-                new WeightedBlockStateProvider().addState(BlockStates.BUDDING_OAK_LEAVES, 2).addState(BlockStates.FLOWERING_OAK_LEAVES, 1),
-                new BlobFoliagePlacer(UniformIntDistribution.of(2), UniformIntDistribution.of(0), 3),
                 new StraightTrunkPlacer(4, 2, 0),
+                new WeightedBlockStateProvider(method_35926().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1)),
+                new SimpleBlockStateProvider(FruitfulBlocks.FLOWERING_OAK_SAPLING.getDefaultState()),
+                new BlobFoliagePlacer(ConstantIntProvider.create(2), ConstantIntProvider.create(0), 3),
                 new TwoLayersFeatureSize(1, 0, 1))
         ).ignoreVines().build();
         public static final TreeFeatureConfig FLOWERING_FANCY_OAK = (new TreeFeatureConfig.Builder(
                 new SimpleBlockStateProvider(BlockStates.OAK_LOG),
-                new WeightedBlockStateProvider().addState(BlockStates.BUDDING_OAK_LEAVES, 2).addState(BlockStates.FLOWERING_OAK_LEAVES, 1),
-                new LargeOakFoliagePlacer(UniformIntDistribution.of(2),
-                UniformIntDistribution.of(4), 4), new LargeOakTrunkPlacer(3, 11, 0),
+                new LargeOakTrunkPlacer(3, 11, 0),
+                new WeightedBlockStateProvider(method_35926().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1)),
+                new SimpleBlockStateProvider(FruitfulBlocks.FLOWERING_OAK_SAPLING.getDefaultState()),
+                new LargeOakFoliagePlacer(ConstantIntProvider.create(2),
+                ConstantIntProvider.create(4), 4),
                 new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)))
-        ).ignoreVines().heightmap(Heightmap.Type.MOTION_BLOCKING).build();
+        ).ignoreVines().build();
     }
 
     public static final class Configured {
@@ -102,7 +110,7 @@ public class FruitfulFeatures {
         public static final ConfiguredFeature<?, ?> FOREST_FLOWER_TREES = Feature.RANDOM_SELECTOR.configure(new RandomFeatureConfig(ImmutableList.of(ConfiguredFeatures.BIRCH_BEES_002.withChance(0.2F), FLOWERING_FANCY_OAK_BEES_002.withChance(0.05F), ConfiguredFeatures.FANCY_OAK_BEES_002.withChance(0.053F), ConfiguredFeatures.OAK_BEES_002.withChance(0.5F)), FLOWERING_OAK_BEES_002)).decorate(ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP).decorate(Decorator.COUNT_EXTRA.configure(new CountExtraDecoratorConfig(6, 0.1F, 1)));
 
         private static <FC extends FeatureConfig> void register(String name, ConfiguredFeature<FC, ?> configuredFeature) {
-            Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(Fruitful.MODID, name), configuredFeature);
+            Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, Fruitful.id(name), configuredFeature);
         }
 
         public static void registerConfiguredFeatures() {

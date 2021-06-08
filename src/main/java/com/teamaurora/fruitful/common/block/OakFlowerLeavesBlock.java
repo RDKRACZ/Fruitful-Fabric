@@ -13,7 +13,7 @@ import net.minecraft.world.WorldAccess;
 import java.util.Random;
 
 public class OakFlowerLeavesBlock extends LeavesBlock {
-    public OakFlowerLeavesBlock(AbstractBlock.Settings properties) {
+    public OakFlowerLeavesBlock(Settings properties) {
         super(properties);
     }
 

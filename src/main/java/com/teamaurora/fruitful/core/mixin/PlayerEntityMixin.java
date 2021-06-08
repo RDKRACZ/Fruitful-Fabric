@@ -32,7 +32,7 @@ public abstract class PlayerEntityMixin {
         PlayerEntity player = (PlayerEntity) (Object) this;
 
         // APPLES GIVE SUSTAINING //
-        if (stack.getItem().isIn(FruitfulTags.Items.GIVES_SUSTAINING)) {
+        if (stack.isIn(FruitfulTags.Items.GIVES_SUSTAINING)) {
             if (player.hasStatusEffect(FruitfulEffects.SUSTAINING)) {
                 int ticksRemaining = Objects.requireNonNull(player.getStatusEffect(FruitfulEffects.SUSTAINING)).getDuration();
                 player.addStatusEffect(new StatusEffectInstance(FruitfulEffects.SUSTAINING, Math.max(200, ticksRemaining), 0, false, false, true));
@@ -40,7 +40,7 @@ public abstract class PlayerEntityMixin {
                 player.addStatusEffect(new StatusEffectInstance(FruitfulEffects.SUSTAINING, 200, 0, false, false, true));
             }
         }
-        if (stack.getItem().isIn(FruitfulTags.Items.GIVES_SUSTAINING_II)) {
+        if (stack.isIn(FruitfulTags.Items.GIVES_SUSTAINING_II)) {
             if (player.hasStatusEffect(FruitfulEffects.SUSTAINING)) {
                 int ticksRemaining = Objects.requireNonNull(player.getStatusEffect(FruitfulEffects.SUSTAINING)).getDuration();
                 player.addStatusEffect(new StatusEffectInstance(FruitfulEffects.SUSTAINING, Math.max(200, ticksRemaining), 1, false, false, true));
@@ -48,7 +48,7 @@ public abstract class PlayerEntityMixin {
                 player.addStatusEffect(new StatusEffectInstance(FruitfulEffects.SUSTAINING, 200, 1, false, false, true));
             }
         }
-        if (stack.getItem().isIn(FruitfulTags.Items.GIVES_SUSTAINING_LONG)) {
+        if (stack.isIn(FruitfulTags.Items.GIVES_SUSTAINING_LONG)) {
             if (player.hasStatusEffect(FruitfulEffects.SUSTAINING)) {
                 int ticksRemaining = Objects.requireNonNull(player.getStatusEffect(FruitfulEffects.SUSTAINING)).getDuration();
                 player.addStatusEffect(new StatusEffectInstance(FruitfulEffects.SUSTAINING, Math.max(400, ticksRemaining), 0, false, false, true));
