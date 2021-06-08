@@ -29,7 +29,6 @@ import net.minecraft.world.gen.trunk.LargeOakTrunkPlacer;
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer;
 import org.apache.logging.log4j.Level;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
