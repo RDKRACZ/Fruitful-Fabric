@@ -3,7 +3,7 @@
   "id": "fruitful",
   "version": "${version}",
   "name": "Fruitful",
-  "description": "A Fabric port of an overhaul to apple farming and eating!",
+  "description": "Improves the gameplay of obtaining apples by giving them a new tree!",
   "authors": [
     "Team Aurora"
   ],
