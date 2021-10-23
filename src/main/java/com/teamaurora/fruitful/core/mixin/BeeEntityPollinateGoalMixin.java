@@ -18,12 +18,9 @@ public abstract class BeeEntityPollinateGoalMixin {
     @Shadow
     protected abstract Optional<BlockPos> findFlower(Predicate<BlockState> p_226500_1_, double distance);
 
-    public BeeEntityPollinateGoalMixin() {
-    }
-
     @Inject(method = "getFlower", at = @At("HEAD"), cancellable = true)
     private void onGetFlower(CallbackInfoReturnable<Optional<BlockPos>> cir) {
-        Optional<BlockPos> pos = findFlower((blockState) -> blockState.getBlock() == FruitfulBlocks.BLOSSOMING_OAK_LEAVES,5.0d);
+        var pos = findFlower((blockState) -> blockState.getBlock() == FruitfulBlocks.BLOSSOMING_OAK_LEAVES,5.0d);
 
         if (pos.isPresent())
             cir.setReturnValue(pos);

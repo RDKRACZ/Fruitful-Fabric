@@ -11,9 +11,9 @@ import java.util.function.Function;
 
 public class FruitfulTags {
     public static class Items {
-        public static final Identified<Item> GIVES_SUSTAINING = (Identified<Item>) create(Fruitful.id("gives_sustaining"), TagRegistry::item);
-        public static final Identified<Item> GIVES_SUSTAINING_II = (Identified<Item>) create(Fruitful.id("gives_sustaining_ii"), TagRegistry::item);
-        public static final Identified<Item> GIVES_SUSTAINING_LONG = (Identified<Item>) create(Fruitful.id("gives_sustaining_long"), TagRegistry::item);
+        public static final Tag<Item> GIVES_SUSTAINING = create(Fruitful.id("gives_sustaining"), TagRegistry::item);
+        public static final Tag<Item> GIVES_SUSTAINING_II = create(Fruitful.id("gives_sustaining_ii"), TagRegistry::item);
+        public static final Tag<Item> GIVES_SUSTAINING_LONG = create(Fruitful.id("gives_sustaining_long"), TagRegistry::item);
     }
 
     private static <E> Tag<E> create(Identifier pathName, Function<Identifier, Tag<E>> tagCreateSupplier) {

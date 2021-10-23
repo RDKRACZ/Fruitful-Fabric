@@ -1,19 +1,13 @@
 package com.teamaurora.fruitful.core.registry;
 
+import co.eltrut.differentiate.core.registrator.EffectHelper;
 import com.teamaurora.fruitful.core.Fruitful;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.util.registry.Registry;
 
 public class FruitfulEffects {
-    public static StatusEffect SUSTAINING;
+    private static final EffectHelper HELPER = Fruitful.REGISTRATOR.getHelper(Registry.STATUS_EFFECT);
 
-    private static <S extends StatusEffect> S register(String path, S effect) {
-        Registry.register(Registry.STATUS_EFFECT, Fruitful.id(path), effect);
-        return effect;
-    }
-
-    public static void init(){
-        SUSTAINING = register("sustaining", new StatusEffect(StatusEffectType.BENEFICIAL, 16774917));
-    }
+    public static StatusEffect SUSTAINING = HELPER.createEffect("sustaining", new StatusEffect(StatusEffectCategory.BENEFICIAL, 16774917));
 }

@@ -3,7 +3,7 @@
   "package": "com.teamaurora.fruitful.core.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "BeeEntityFindPollinationTargetGoalMixin",
+    "BeeEntityGrowCropsGoalMixin",
     "BeeEntityPollinateGoalMixin",
     "PlayerEntityMixin"
   ],

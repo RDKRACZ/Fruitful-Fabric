@@ -1,22 +1,24 @@
 package com.teamaurora.fruitful.common.block;
 
+import co.eltrut.differentiate.core.util.GroupUtil;
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.Shearable;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -28,27 +30,26 @@ import net.minecraft.world.WorldAccess;
 import java.util.Random;
 
 /**
-* This class was originally nice but now it's a mess of duplicated code lol
+* This class was originally nice, but now it's a mess of duplicated code lol
 * Blame More Waterlogging
-* Credit to Team Abnormals for the fillItemGroup code
+* Credit to Eltrut & Co. for the fillItem code
  */
-public class OakBlossomBlock extends Block implements Shearable {
+
+@SuppressWarnings({"deprecation"})
+public class OakBlossomBlock extends Block {
     public static final IntProperty DISTANCE = Properties.DISTANCE_1_7;
     public static final BooleanProperty PERSISTENT = Properties.PERSISTENT;
     public static final BooleanProperty POLLINATED = BooleanProperty.of("pollinated");
-    //TODO: Make the filler somehow possible in fabric
-    /*
-    private static final TargetedItemGroupFiller FILLER = new TargetedItemGroupFiller(
-            () -> Items.DARK_OAK_LEAVES
-    );
-    */
+    private final Item followItem;
 
-    public OakBlossomBlock(Settings properties) {
-        super(properties);
+    public OakBlossomBlock(Settings settings, Item followItem) {
+        super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(DISTANCE, 7).with(PERSISTENT, false).with(POLLINATED, false));
+        this.followItem = followItem;
     }
 
-    public VoxelShape getSidesShape(BlockState state, BlockView reader, BlockPos pos) {
+    @Override
+    public VoxelShape getSidesShape(BlockState state, BlockView world, BlockPos pos) {
         return VoxelShapes.empty();
     }
 
@@ -61,18 +62,18 @@ public class OakBlossomBlock extends Block implements Shearable {
      * Performs a random tick on a block.
      */
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (worldIn.getMoonSize() <= 0.75 && !state.get(LeavesBlock.PERSISTENT)) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        if (world.getMoonSize() <= 0.75 && !state.get(LeavesBlock.PERSISTENT)) {
             if (state.get(POLLINATED)) {
-                worldIn.setBlockState(pos, FruitfulBlocks.APPLE_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
+                world.setBlockState(pos, FruitfulBlocks.APPLE_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
             } else {
-                worldIn.setBlockState(pos, FruitfulBlocks.BUDDING_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
+                world.setBlockState(pos, FruitfulBlocks.BUDDING_OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
             }
         }
 
         if (!state.get(PERSISTENT) && state.get(DISTANCE) == 7) {
-            dropStacks(state, worldIn, pos);
-            worldIn.removeBlock(pos, false);
+            dropStacks(state, world, pos);
+            world.removeBlock(pos, false);
         }
     }
 
@@ -81,34 +82,38 @@ public class OakBlossomBlock extends Block implements Shearable {
         builder.add(DISTANCE, PERSISTENT, POLLINATED);
     }
 
-    public BlockState getPlacementState(ItemPlacementContext context) {
-        return updateDistance(this.getDefaultState().with(PERSISTENT, Boolean.TRUE), context.getWorld(), context.getBlockPos());
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return updateDistanceFromLogs(this.getDefaultState().with(PERSISTENT, Boolean.TRUE), ctx.getWorld(), ctx.getBlockPos());
     }
 
-    public void scheduledTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        worldIn.setBlockState(pos, updateDistance(state, worldIn, pos), 3);
+    @Override
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        world.setBlockState(pos, updateDistanceFromLogs(state, world, pos), 3);
     }
 
-    public int getOpacity(BlockState state, BlockView worldIn, BlockPos pos) {
+    @Override
+    public int getOpacity(BlockState state, BlockView world, BlockPos pos) {
         return 1;
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState stateIn, Direction facing, BlockState facingState, WorldAccess worldIn, BlockPos currentPos, BlockPos facingPos) {
-        int i = getDistance(facingState) + 1;
-        if (i != 1 || stateIn.get(DISTANCE) != i) {
-            worldIn.getBlockTickScheduler().schedule(currentPos, this, 1);
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        var i = getDistanceFromLog(neighborState) + 1;
+        if (i != 1 || state.get(DISTANCE) != i) {
+            world.getBlockTickScheduler().schedule(neighborPos, this, 1);
         }
 
-        return stateIn;
+        return state;
     }
 
-    private static BlockState updateDistance(BlockState state, WorldAccess worldIn, BlockPos pos) {
+    private static BlockState updateDistanceFromLogs(BlockState state, WorldAccess world, BlockPos pos) {
         int i = 7;
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
 
         for(Direction direction : Direction.values()) {
             blockpos$mutable.set(pos, direction);
-            i = Math.min(i, getDistance(worldIn.getBlockState(blockpos$mutable)) + 1);
+            i = Math.min(i, getDistanceFromLog(world.getBlockState(blockpos$mutable)) + 1);
             if (i == 1) {
                 break;
             }
@@ -117,43 +122,32 @@ public class OakBlossomBlock extends Block implements Shearable {
         return state.with(DISTANCE, i);
     }
 
-    private static int getDistance(BlockState neighbor) {
-        if (BlockTags.LOGS.contains(neighbor.getBlock())) {
+    private static int getDistanceFromLog(BlockState state) {
+        if (BlockTags.LOGS.contains(state.getBlock())) {
             return 0;
         } else {
-            return neighbor.getBlock() instanceof LeavesBlock || neighbor.getBlock() instanceof OakBlossomBlock ? neighbor.get(DISTANCE) : 7;
+            return state.getBlock() instanceof LeavesBlock || state.getBlock() instanceof OakBlossomBlock ? state.get(DISTANCE) : 7;
         }
     }
 
     @Environment(EnvType.CLIENT)
-    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (worldIn.hasRain(pos.up())) {
-            if (rand.nextInt(15) == 1) {
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if (world.hasRain(pos.up())) {
+            if (random.nextInt(15) == 1) {
                 BlockPos blockpos = pos.down();
-                BlockState blockstate = worldIn.getBlockState(blockpos);
-                if (!blockstate.isOpaque() || !blockstate.isSideSolidFullSquare(worldIn, blockpos, Direction.UP)) {
-                    double d0 = (double)pos.getX() + rand.nextDouble();
+                BlockState blockstate = world.getBlockState(blockpos);
+                if (!blockstate.isOpaque() || !blockstate.isSideSolidFullSquare(world, blockpos, Direction.UP)) {
+                    double d0 = (double)pos.getX() + random.nextDouble();
                     double d1 = (double)pos.getY() - 0.05D;
-                    double d2 = (double)pos.getZ() + rand.nextDouble();
-                    worldIn.addParticle(ParticleTypes.DRIPPING_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                    double d2 = (double)pos.getZ() + random.nextDouble();
+                    world.addParticle(ParticleTypes.DRIPPING_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
     }
 
-    /*
-    public void addStacksForDisplay(ItemGroup group, DefaultedList<ItemStack> items) {
-        FILLER.fillItem(this.asItem(), group, items);
-    }
-    */
-
     @Override
-    public void sheared(SoundCategory shearedSoundCategory) {
-
-    }
-
-    @Override
-    public boolean isShearable() {
-        return false;
+    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> items) {
+        GroupUtil.fillItem(this.asItem(), this.followItem, group, items);
     }
 }

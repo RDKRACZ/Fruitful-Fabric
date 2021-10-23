@@ -13,8 +13,8 @@ import net.minecraft.world.biome.BiomeKeys;
 import java.util.Arrays;
 import java.util.List;
 
-@Config(name = Fruitful.MODID)
-@Background(value = Fruitful.MODID + ":textures/config/background.png")
+@Config(name = Fruitful.MOD_ID)
+@Background(value = Fruitful.MOD_ID + ":textures/config/background.png")
 public class FruitfulConfig implements ConfigData {
     @RequiresRestart
     @Comment("Biomes flowering oak trees can spawn in")
