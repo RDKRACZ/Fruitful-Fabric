@@ -34,36 +34,9 @@ public class Fruitful implements ModInitializer {
     public static final Registrator REGISTRATOR = new Registrator(MOD_ID);
 
     @Override
+    @SuppressWarnings("UnstableApiUsage")
     public void onInitialize() {
         FruitfulConfig.registerConfig();
-
-        // Configured Features //
-        FruitfulFeatures.Configured.register("flowering_oak", FruitfulFeatures.Configured.FLOWERING_OAK);
-        FruitfulFeatures.Configured.register("flowering_fancy_oak", FruitfulFeatures.Configured.FLOWERING_FANCY_OAK);
-        FruitfulFeatures.Configured.register("flowering_oak_bees_005", FruitfulFeatures.Configured.FLOWERING_OAK_BEES_005);
-        FruitfulFeatures.Configured.register("flowering_fancy_oak_bees_005", FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_BEES_005);
-        FruitfulFeatures.Configured.register("flowering_oak_bees_002", FruitfulFeatures.Configured.FLOWERING_OAK_BEES_002);
-        FruitfulFeatures.Configured.register("flowering_fancy_oak_bees_002", FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_BEES_002);
-
-        FruitfulFeatures.Configured.register("flowering_oak_infrequent", FruitfulFeatures.Configured.FLOWERING_OAK_INFREQUENT);
-        FruitfulFeatures.Configured.register("forest_flower_trees", FruitfulFeatures.Configured.FOREST_FLOWER_TREES);
-
-        // Modifications //
-        var flowerBiomes = FruitfulConfig.get().flowerBiomes.toString().replace("[", "").replace("]", "").replace(" ", "").split(",", FruitfulConfig.get().flowerBiomes.size());
-        for (int flowerBiome = 0; flowerBiome < flowerBiomes.length; flowerBiome++) {
-            var biomeSelector = BiomeSelectors.includeByKey(RegistryKey.of(Registry.BIOME_KEY, new Identifier(flowerBiomes[flowerBiome])));
-            BiomeModifications.addFeature(biomeSelector, GenerationStep.Feature.VEGETAL_DECORATION, Objects.requireNonNull(FruitfulFeatures.registryKey(FruitfulFeatures.Configured.FLOWERING_OAK_INFREQUENT)));
-        }
-
-        if (FruitfulConfig.get().flowerBiomes.toString().contains(BiomeKeys.FLOWER_FOREST.getValue().toString())){
-            BiomeModifications.create(Fruitful.id("remove_flower_forest_trees"))
-                    .add(ModificationPhase.REPLACEMENTS, BiomeSelectors.includeByKey(BiomeKeys.FLOWER_FOREST), (c)-> {
-                        if(c.getGenerationSettings().removeBuiltInFeature(ConfiguredFeatures.FOREST_FLOWER_TREES))
-                        {
-                            c.getGenerationSettings().addFeature(GenerationStep.Feature.VEGETAL_DECORATION, FruitfulFeatures.registryKey(FruitfulFeatures.Configured.FOREST_FLOWER_TREES));
-                        }
-                    });
-        }
 
         Reflection.initialize(
                 FruitfulEffects.class,

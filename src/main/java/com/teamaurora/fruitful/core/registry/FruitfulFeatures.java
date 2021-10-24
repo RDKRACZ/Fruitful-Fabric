@@ -14,7 +14,6 @@ import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.decorator.CountExtraDecoratorConfig;
@@ -29,16 +28,38 @@ import net.minecraft.world.gen.trunk.LargeOakTrunkPlacer;
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer;
 import org.apache.logging.log4j.Level;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.OptionalInt;
 
 public class FruitfulFeatures {
     static {
+        // Configured Features //
+        Configured.register("flowering_oak", Configured.FLOWERING_OAK);
+        Configured.register("flowering_fancy_oak", Configured.FLOWERING_FANCY_OAK);
+        Configured.register("flowering_oak_bees_005", Configured.FLOWERING_OAK_BEES_005);
+        Configured.register("flowering_fancy_oak_bees_005", Configured.FLOWERING_FANCY_OAK_BEES_005);
+        Configured.register("flowering_oak_bees_002", Configured.FLOWERING_OAK_BEES_002);
+        Configured.register("flowering_fancy_oak_bees_002", Configured.FLOWERING_FANCY_OAK_BEES_002);
 
+        Configured.register("flowering_oak_infrequent", Configured.FLOWERING_OAK_INFREQUENT);
+        Configured.register("forest_flower_trees", Configured.FOREST_FLOWER_TREES);
 
+        // Modifications //
+        var flowerBiomes = FruitfulConfig.get().flowerBiomes.toString().replace("[", "").replace("]", "").replace(" ", "").split(",", FruitfulConfig.get().flowerBiomes.size());
+        for (int flowerBiome = 0; flowerBiome < flowerBiomes.length; flowerBiome++) {
+            var biomeSelector = BiomeSelectors.includeByKey(RegistryKey.of(Registry.BIOME_KEY, new Identifier(flowerBiomes[flowerBiome])));
+            BiomeModifications.addFeature(biomeSelector, GenerationStep.Feature.VEGETAL_DECORATION, Objects.requireNonNull(FruitfulFeatures.registryKey(FruitfulFeatures.Configured.FLOWERING_OAK_INFREQUENT)));
+        }
 
+        if (FruitfulConfig.get().flowerBiomes.toString().contains(BiomeKeys.FLOWER_FOREST.getValue().toString())){
+            BiomeModifications.create(Fruitful.id("remove_flower_forest_trees"))
+                    .add(ModificationPhase.REPLACEMENTS, BiomeSelectors.includeByKey(BiomeKeys.FLOWER_FOREST), (c)-> {
+                        if(c.getGenerationSettings().removeBuiltInFeature(ConfiguredFeatures.FOREST_FLOWER_TREES))
+                        {
+                            c.getGenerationSettings().addFeature(GenerationStep.Feature.VEGETAL_DECORATION, FruitfulFeatures.registryKey(FruitfulFeatures.Configured.FOREST_FLOWER_TREES));
+                        }
+                    });
+        }
     }
 
     public static RegistryKey<ConfiguredFeature<?, ?>> registryKey(ConfiguredFeature<?, ?> carver)
