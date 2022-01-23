@@ -1,3 +1,5 @@
+# NOTE: This repo is DEPRECATED and will not be updated. For pull requests, issues, etc. please see https://github.com/teamauroramods/Fruitful
+
 <p align="center"><img src="https://media.discordapp.net/attachments/699373761455194162/833442184358395934/Fruitful.png" width=60%></p>
 <h3 align="center">Fruitful Fabric</h3>
 
